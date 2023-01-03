@@ -1,3 +1,6 @@
+import { useParams } from "react-router-dom";
+
 export default function AllPosts() {
-  return <h1>All Posts</h1>;
+  const { pageNumber } = useParams();
+  return <h1>All Posts; page {pageNumber}</h1>;
 }

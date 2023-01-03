@@ -1435,6 +1435,10 @@ h6{
   color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
+h1 {
+  text-align: center;
+}
+
 p{
   font-family: cubano, sans-serif;
   font-weight: 400;

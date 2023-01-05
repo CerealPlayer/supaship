@@ -1715,7 +1715,6 @@ svg {
 }
 
 .login-form-input{
-  margin: 1rem !important;
   border-radius: 0.25rem !important;
   border-width: 2px !important;
   --tw-border-opacity: 1 !important;

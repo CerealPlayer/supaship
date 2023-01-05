@@ -1,3 +1,3 @@
 export default function PostView() {
-  return <h1>Post View</h1>
+  return <h1>Post View</h1>;
 }

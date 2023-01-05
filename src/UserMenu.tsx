@@ -1,6 +1,6 @@
-import { useContext } from "react";
-import { UserContext } from "./App";
-import { supaClient } from "./supa-client";
+import { useContext } from 'react';
+import { UserContext } from './App';
+import { supaClient } from './supa-client';
 
 export default function UserMenu() {
   const { profile } = useContext(UserContext);
@@ -8,10 +8,10 @@ export default function UserMenu() {
   return (
     <>
       <div className="flex flex-col">
-        <h2>Welcome {profile?.username || "dawg"}</h2>
+        <h2>Welcome {profile?.username || 'dawg'}</h2>
         <button
           onClick={() => supaClient.auth.signOut()}
-          className='user-menu-logout-button'
+          className="user-menu-logout-button"
         >
           Logout
         </button>

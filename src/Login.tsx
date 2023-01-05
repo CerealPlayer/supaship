@@ -9,7 +9,7 @@ export default function Login() {
   const [authMode, setAuthMode] = useState<'sign_in' | 'sign_up'>('sign_in');
   return (
     <>
-      <div className='flex m-4 place-items-center'>
+      <div className="flex m-4 place-items-center">
         <button
           onClick={() => {
             setOpen(true);
@@ -18,7 +18,7 @@ export default function Login() {
         >
           Login
         </button>{' '}
-        <span className='p-2'> or </span>{' '}
+        <span className="p-2"> or </span>{' '}
         <button
           onClick={() => {
             setOpen(true);
@@ -33,15 +33,19 @@ export default function Login() {
         dialogStateChange={(open) => setOpen(open)}
         contents={
           <>
-            <Auth supabaseClient={supaClient} view={authMode} appearance={{
-              theme: ThemeSupa,
-              className: {
-                container: 'login-form-container',
-                label: 'login-form-label',
-                button: 'login-form-button',
-                input: 'login-form-input'
-              }
-            }} />
+            <Auth
+              supabaseClient={supaClient}
+              view={authMode}
+              appearance={{
+                theme: ThemeSupa,
+                className: {
+                  container: 'login-form-container',
+                  label: 'login-form-label',
+                  button: 'login-form-button',
+                  input: 'login-form-input',
+                },
+              }}
+            />
           </>
         }
       />

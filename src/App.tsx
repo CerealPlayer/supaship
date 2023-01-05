@@ -4,6 +4,8 @@ import AllPosts from "./AllPosts";
 import PostView from "./PostView";
 import Welcome from "./Welcome";
 import NavBar from "./NavBar";
+import { SupashipUserInfo, useSession } from "./use-session";
+import { createContext } from "react";
 
 const router = createBrowserRouter([
   {
@@ -38,11 +40,17 @@ function App() {
 
 export default App;
 
+export const UserContext = createContext<SupashipUserInfo>({
+  profile: null,
+  session: null
+})
+
 function Layout() {
+  const supashipUserInfo = useSession();
   return (
-    <>
+    <UserContext.Provider value={supashipUserInfo}>
       <NavBar />
       <Outlet />
-    </>
+    </UserContext.Provider>
   );
 }

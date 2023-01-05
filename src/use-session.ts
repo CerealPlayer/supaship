@@ -1,6 +1,6 @@
-import { Session, RealtimeChannel } from '@supabase/supabase-js';
-import { useEffect, useState } from 'react';
-import { supaClient } from './supa-client';
+import { Session, RealtimeChannel } from "@supabase/supabase-js";
+import { useEffect, useState } from "react";
+import { supaClient } from "./supa-client";
 
 export interface UserProfile {
   username: string;
@@ -15,7 +15,7 @@ export interface SupashipUserInfo {
 export function useSession(): SupashipUserInfo {
   const [userInfo, setUserInfo] = useState<SupashipUserInfo>({
     profile: null,
-    session: null
+    session: null,
   });
   const [channel, setChannel] = useState<RealtimeChannel | null>(null);
 
@@ -29,7 +29,10 @@ export function useSession(): SupashipUserInfo {
   }, []);
 
   const listenToUserProfileChanges = async (userId: string) => {
-    const { data } = await supaClient.from("user_profiles").select("*").filter("user_id", "eq", userId);
+    const { data } = await supaClient
+      .from("user_profiles")
+      .select("*")
+      .filter("user_id", "eq", userId);
     if (data) {
       setUserInfo({ ...userInfo, profile: data[0] });
     }
@@ -38,13 +41,16 @@ export function useSession(): SupashipUserInfo {
       .on(
         "postgres_changes",
         {
-          event: '*',
+          event: "*",
           schema: "public",
           table: "user_profiles",
-          filter: `user_id=eq.${userId}`
+          filter: `user_id=eq.${userId}`,
         },
         (payload) => {
-          setUserInfo({ ...userInfo, profile: payload.new as UserProfile });
+          setUserInfo({
+            ...userInfo,
+            profile: payload.new as UserProfile,
+          });
         }
       )
       .subscribe();
@@ -52,13 +58,14 @@ export function useSession(): SupashipUserInfo {
 
   useEffect(() => {
     if (userInfo.session?.user && !userInfo.profile) {
-      listenToUserProfileChanges(userInfo.session.user.id)
-        .then(newChannel => {
+      listenToUserProfileChanges(userInfo.session.user.id).then(
+        (newChannel) => {
           if (channel) {
             channel.unsubscribe();
           }
           setChannel(newChannel);
-        });
+        }
+      );
     } else if (!userInfo.session?.user) {
       channel?.unsubscribe();
       setChannel(null);
@@ -66,4 +73,4 @@ export function useSession(): SupashipUserInfo {
   }, [userInfo.session]);
 
   return userInfo;
-};
+}

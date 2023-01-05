@@ -42,8 +42,8 @@ export default App;
 
 export const UserContext = createContext<SupashipUserInfo>({
   profile: null,
-  session: null
-})
+  session: null,
+});
 
 function Layout() {
   const supashipUserInfo = useSession();

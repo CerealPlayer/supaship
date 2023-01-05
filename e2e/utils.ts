@@ -39,7 +39,9 @@ export async function signUp(
   const passwordInput = page.locator('input[name="password"]');
   await passwordInput.fill(password);
   await page.keyboard.press("Enter");
-  const welcomeNotice = page.locator("h2", { hasText: "Welcome to Supaship!" });
+  const welcomeNotice = page.locator("h2", {
+    hasText: "Welcome to Supaship!",
+  });
   await expect(welcomeNotice).toHaveCount(1);
   if (skipUserName) {
     return;

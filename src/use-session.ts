@@ -1,76 +1,76 @@
-import { Session, RealtimeChannel } from "@supabase/supabase-js";
-import { useEffect, useState } from "react";
-import { supaClient } from "./supa-client";
+import { Session, RealtimeChannel } from '@supabase/supabase-js'
+import { useEffect, useState } from 'react'
+import { supaClient } from './supa-client'
 
 export interface UserProfile {
-  username: string;
-  avatarUrl?: string;
+  username: string
+  avatarUrl?: string
 }
 
 export interface SupashipUserInfo {
-  session: Session | null;
-  profile: UserProfile | null;
+  session: Session | null
+  profile: UserProfile | null
 }
 
 export function useSession(): SupashipUserInfo {
   const [userInfo, setUserInfo] = useState<SupashipUserInfo>({
     profile: null,
     session: null,
-  });
-  const [channel, setChannel] = useState<RealtimeChannel | null>(null);
+  })
+  const [channel, setChannel] = useState<RealtimeChannel | null>(null)
 
   useEffect(() => {
     supaClient.auth.getSession().then(({ data: { session } }) => {
-      setUserInfo({ ...userInfo, session });
+      setUserInfo({ ...userInfo, session })
       supaClient.auth.onAuthStateChange((_event, session) => {
-        setUserInfo({ session, profile: null });
-      });
-    });
-  }, []);
+        setUserInfo({ session, profile: null })
+      })
+    })
+  }, [])
 
   const listenToUserProfileChanges = async (userId: string) => {
     const { data } = await supaClient
-      .from("user_profiles")
-      .select("*")
-      .filter("user_id", "eq", userId);
+      .from('user_profiles')
+      .select('*')
+      .filter('user_id', 'eq', userId)
     if (data) {
-      setUserInfo({ ...userInfo, profile: data[0] });
+      setUserInfo({ ...userInfo, profile: data[0] })
     }
     return supaClient
-      .channel("public:user_profiles")
+      .channel('public:user_profiles')
       .on(
-        "postgres_changes",
+        'postgres_changes',
         {
-          event: "*",
-          schema: "public",
-          table: "user_profiles",
+          event: '*',
+          schema: 'public',
+          table: 'user_profiles',
           filter: `user_id=eq.${userId}`,
         },
         (payload) => {
           setUserInfo({
             ...userInfo,
             profile: payload.new as UserProfile,
-          });
+          })
         }
       )
-      .subscribe();
-  };
+      .subscribe()
+  }
 
   useEffect(() => {
     if (userInfo.session?.user && !userInfo.profile) {
       listenToUserProfileChanges(userInfo.session.user.id).then(
         (newChannel) => {
           if (channel) {
-            channel.unsubscribe();
+            channel.unsubscribe()
           }
-          setChannel(newChannel);
+          setChannel(newChannel)
         }
-      );
+      )
     } else if (!userInfo.session?.user) {
-      channel?.unsubscribe();
-      setChannel(null);
+      channel?.unsubscribe()
+      setChannel(null)
     }
-  }, [userInfo.session]);
+  }, [userInfo.session])
 
-  return userInfo;
+  return userInfo
 }

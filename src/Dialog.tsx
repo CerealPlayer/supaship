@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from 'react'
 
 export interface DialogProps {
-  allowClose?: boolean;
-  contents: React.ReactNode;
-  open: boolean;
-  dialogStateChange?: (open: boolean) => void;
+  allowClose?: boolean
+  contents: React.ReactNode
+  open: boolean
+  dialogStateChange?: (open: boolean) => void
 }
 
 export default function Dialog({
@@ -13,18 +13,18 @@ export default function Dialog({
   open,
   dialogStateChange = () => {},
 }: DialogProps) {
-  const [showModal, setShowModal] = useState(open);
-  const dialog = useRef<HTMLDivElement>(null);
+  const [showModal, setShowModal] = useState(open)
+  const dialog = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (open !== showModal) {
-      setShowModal(open);
+      setShowModal(open)
     }
-  }, [open]);
+  }, [open])
 
   function updateDialogState(open: boolean) {
-    setShowModal(open);
-    dialogStateChange(open);
+    setShowModal(open)
+    dialogStateChange(open)
   }
 
   return showModal ? (
@@ -33,15 +33,15 @@ export default function Dialog({
       <div
         onClick={({ target }) => {
           if (!allowClose || dialog.current?.contains(target as any)) {
-            return;
+            return
           }
-          updateDialogState(false);
+          updateDialogState(false)
         }}
         onKeyDown={({ key }) => {
-          if (!allowClose || key !== "Escape") {
-            return;
+          if (!allowClose || key !== 'Escape') {
+            return
           }
-          updateDialogState(false);
+          updateDialogState(false)
         }}
         className="dialog-backdrop"
       >
@@ -55,5 +55,5 @@ export default function Dialog({
         </div>
       </div>
     </>
-  ) : null;
+  ) : null
 }

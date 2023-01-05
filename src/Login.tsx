@@ -4,6 +4,10 @@ import { useState } from 'react';
 import Dialog from './Dialog';
 import { supaClient } from './supa-client';
 
+export const setReturnPath = () => {
+  localStorage.setItem('returnPath', window.location.pathname);
+};
+
 export default function Login() {
   const [open, setOpen] = useState(false);
   const [authMode, setAuthMode] = useState<'sign_in' | 'sign_up'>('sign_in');
@@ -14,6 +18,7 @@ export default function Login() {
           onClick={() => {
             setOpen(true);
             setAuthMode('sign_in');
+            setReturnPath();
           }}
         >
           Login
@@ -23,6 +28,7 @@ export default function Login() {
           onClick={() => {
             setOpen(true);
             setAuthMode('sign_up');
+            setReturnPath();
           }}
         >
           Sign Up

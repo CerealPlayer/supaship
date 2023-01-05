@@ -1,8 +1,26 @@
 import { useContext, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { redirect, useNavigate } from 'react-router-dom';
 import { UserContext } from './App';
 import Dialog from './Dialog';
 import { supaClient } from './supa-client';
+
+export async function welcomeLoader() {
+  const {
+    data: { user },
+  } = await supaClient.auth.getUser();
+  if (!user) {
+    return redirect('/');
+  }
+  const { data } = await supaClient
+    .from('user_profiles')
+    .select('*')
+    .eq('user_id', user?.id)
+    .single();
+  if (data?.username) {
+    return redirect('/');
+  }
+  return null;
+}
 
 export default function Welcome() {
   const user = useContext(UserContext);
